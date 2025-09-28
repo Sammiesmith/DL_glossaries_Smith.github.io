@@ -25,7 +25,7 @@
       background: linear-gradient(90deg, #0077b6, #00b4d8);
       color: white;
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 1rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
@@ -33,6 +33,17 @@
       margin: 0;
       font-size: 2.5rem;
       font-weight: 600;
+    }
+
+    .blurb {
+      text-align: center;
+      background: #e6f2f8;
+      padding: 1rem;
+      font-size: 1rem;
+      max-width: 900px;
+      margin: 0.5rem auto 1rem;
+      border-left: 6px solid #00b4d8;
+      border-radius: 8px;
     }
 
     .container {
@@ -77,6 +88,14 @@
     <h1>Lecture Glossary</h1>
   </header>
 
+  <div class="blurb">
+    The prerequisite material referenced in this glossary comes from the 
+    <a href="https://inst.eecs.berkeley.edu/~ee127/sp24/assets/notes/eecs127_reader.pdf" target="_blank">
+      EECS 127 Reader (link)
+    </a>.
+    <p>This webpage is updated to CS182/282 Lecture 1 material</p>
+  </div>
+
   <div class="container">
     <table id="glossary" class="display responsive nowrap" style="width:100%">
       <thead>
@@ -106,10 +125,9 @@
   <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
   <script>
-    // Path to your CSV file
-    const csvFilePath = './outputs/Lecture1_Glossary_fixed.csv';
+    // Path to your CSV file (cache-busted)
+    const csvFilePath = './outputs/Lecture1_Glossary_fixed_sorted.csv?v=' + Date.now();
 
-    // Parse CSV and populate table
     Papa.parse(csvFilePath, {
       download: true,
       header: true,
@@ -117,6 +135,7 @@
       complete: function(results) {
         const data = results.data;
         const tbody = document.querySelector('#glossary tbody');
+        tbody.innerHTML = '';
 
         data.forEach(row => {
           const tr = document.createElement('tr');
@@ -130,15 +149,20 @@
         });
 
         // Initialize DataTables after rows are inserted
-        $('#glossary').DataTable({
+        const table = $('#glossary').DataTable({
           responsive: true,
           pageLength: 10,
           lengthChange: true,
           autoWidth: false,
-          order: [[0, 'asc']],
+          order: [], // Keep CSV order
           columnDefs: [
             { targets: [1,2,3], className: 'dt-body-left' }
           ]
+        });
+
+        // Override global search to only search column 0 (Term)
+        $('#glossary_filter input').off().on('keyup', function() {
+          table.column(0).search(this.value).draw();
         });
       }
     });
