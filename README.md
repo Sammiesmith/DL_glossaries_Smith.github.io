@@ -1,6 +1,8 @@
 # Automatic Glossary for CS182 Fall 2025 content
 This pipeline prompts an LLM agent to identify key words in lecture, generate plain enlish definitions, and generate descriptions of how the terms are used in ML/DL. 
 
+Website: https://sammiesmith.github.io/DL_glossaries_Smith.github.io/
+
 ## Instructions for running the pipeline
  Run build.py on a txt file of lecture transcript and a txt file of prerequisite material 
 
