@@ -29,7 +29,7 @@ Lecture Transcript:
 {lecture_text}
 
 Prerequisite Materials:
-{prereq_text[:5000]}  # truncated to first ~5000 chars if long
+{prereq_text} 
 '''
 
 # 5. Send to Gemini (Flash 2.5)
